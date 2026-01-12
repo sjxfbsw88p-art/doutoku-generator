@@ -1,150 +1,49 @@
 import React, { useMemo, useState } from "react";
 
-// =======================
-// 教材マスタ（ここだけ編集）
-// =======================
-const LESSONS = [
-  // --- 1年 ---
-  { grade: 1, title: "ありがとう", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","ありがとう","気づき","支え","思い"] },
-  { grade: 1, title: "ふたりの ゆうた", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","考える","選ぶ","行動","自分"] },
-  { grade: 1, title: "なかよし", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友達","信頼","気持ち","関わり","思いやり"] },
-  { grade: 1, title: "あとかたづけ", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["片付け","節度","習慣","気づき","生活"] },
-  { grade: 1, title: "どうしてかな", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","理由","安全","みんな","守る"] },
-  { grade: 1, title: "つばめ", domain: "D", theme: "自然愛護", aim: "（ねらいは後で入力）", keywords: ["自然","生き物","命","観察","大切"] },
-  // ※PDF抽出で「11」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 1, title: "11", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["違い","文化","交流","理解","尊重"] },
-  { grade: 1, title: "かぼちゃの つる", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","順番","工夫","行動","気づき"] },
-  { grade: 1, title: "おふろばそうじ", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["役割","習慣","続ける","気づき","生活"] },
-  { grade: 1, title: "おおひとやま", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","約束","みんな","安全","守る"] },
-  { grade: 1, title: "ひむかかるた", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","よさ","誇り","学ぶ","大切"] },
-  { grade: 1, title: "ふたりだけで", domain: "C", theme: "だれとでも", aim: "（ねらいは後で入力）", keywords: ["公平","仲間","関わり","気づき","態度"] },
-  { grade: 1, title: "休みじかん", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","切り替え","行動","考える","生活"] },
-  { grade: 1, title: "花の かんむり", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気持ち","行動","関係"] },
+/**
+ * ✅ ここに「r6_materials.json」の中身を貼る（推奨）
+ * 例：{ "1": ["ありがとう","..."], "2": ["大きく なったね", ...], ... }
+ *
+ * そのまま貼れるように、JSONのキーが数字でも文字でもOKにしてあります。
+ */
+const MATERIALS_JSON = {
+  // ★ここに r6_materials.json をコピペして上書きしてください★
+  1: ["ありがとう", "ふたりの ゆうた", "なかよし", "あとかたづけ", "どうしてかな", "つばめ", "ひむかかるた", "花の かんむり"],
+  2: ["大きく なったね", "金の おの", "がんばって", "ぽんたと かんた", "一りん車", "がまんできなくて", "ぎおんまつり", "あぶないよ", "ねえ、聞いて", "きつねと ぶどう", "わりこみ", "お月さまと コロ", "やくそく", "くりの み", "ぐみの木と 小鳥", "七つの 星"],
+  3: ["やさしさのバトン", "さと子の落とし物", "心をしずめて", "ふろしき", "同じ小学校でも", "あの日のこと", "バスの中で", "水族館ではたらく", "助かった命", "これ、全部東京産", "光の星"],
+  4: ["花さき山", "とびらの前で", "新次のしょうぎ", "雨ととの様", "朝がくると", "三つのつつみ", "かわいそうなぞう"],
+  5: ["あいさつの心", "恩返しを", "サタデーグループ", "古いバケツ", "和太鼓調べ", "ことばのカタチ", "折れたタワー", "父の仕事", "流行おくれ", "これって不公平？", "かぜのでんわ"],
+  6: ["言葉のおくりもの", "命のアサガオ", "先着100名様", "8 カスミと携帯電話", "おかげさまで", "ロレンゾの友達", "青の洞門", "最後のおくり物", "消えた本"],
+};
 
-  // --- 2年 ---
-  { grade: 2, title: "大きく なったね", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["成長","いのち","気づき","大切","家族"] },
-  { grade: 2, title: "金の おの", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","本当","信頼","勇気","選択"] },
-  { grade: 2, title: "がんばって", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["係","役割","責任","協力","継続"] },
-  // ※PDF抽出の「ぽんたと かんた」のthemeが崩れていたので補正（必要なら変更OK）
-  { grade: 2, title: "ぽんたと かんた", domain: "A", theme: "善悪の判断・自律", aim: "（ねらいは後で入力）", keywords: ["迷い","判断","勇気","約束","自分で決める"] },
-  { grade: 2, title: "一りん車", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","順番","安全","周り","配慮"] },
-  { grade: 2, title: "がまんできなくて", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["がまん","気持ち","調整","考える","落ち着く"] },
-  // ※PDF抽出で「ーアンリ・ファーブ」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 2, title: "ーアンリ・ファーブ", domain: "D", theme: "自然愛護", aim: "（ねらいは後で入力）", keywords: ["自然","生き物","観察","関心","尊重"] },
-  { grade: 2, title: "三びきは 友だち", domain: "C", theme: "公正・公平", aim: "（ねらいは後で入力）", keywords: ["公平","態度","立場","えこひいき","気づき"] },
-  { grade: 2, title: "ぎおんまつり", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["地域","行事","伝統","誇り","関わり"] },
-  // ※PDF抽出で「こめられた」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 2, title: "こめられた", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["地域","伝統","思い","願い","大切"] },
-  { grade: 2, title: "あぶないよ", domain: "A", theme: "節度、節制（安全）", aim: "（ねらいは後で入力）", keywords: ["安全","判断","危険","断る","守る"] },
-  { grade: 2, title: "ねえ、聞いて", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["聞く","共感","友達","気持ち","関係"] },
-  { grade: 2, title: "きつねと ぶどう", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","気づき","支え","思い","ありがとう"] },
-  { grade: 2, title: "わりこみ", domain: "A", theme: "善悪の判断", aim: "（ねらいは後で入力）", keywords: ["順番","判断","勇気","正しさ","行動"] },
-  { grade: 2, title: "お月さまと コロ", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["素直","気持ち","正直","迷い","決心"] },
-  { grade: 2, title: "やくそく", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","約束","支え","大切","気づき"] },
-  // ※PDF抽出で「23」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 2, title: "23", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","マナー","気持ち"] },
-  { grade: 2, title: "くりの み", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","後悔","気づき","行動","思いやり"] },
-  // ※元データではBだったが、あなたの後半例では自然愛護(D)の扱いもあったので、必要なら修正OK
-  { grade: 2, title: "ぐみの木と 小鳥", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["思いやり","気持ち","行動","関わり","大切"] },
-  { grade: 2, title: "七つの 星", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","不思議","自然","思い","大切"] },
-
-  // --- 3年 ---
-  { grade: 3, title: "やさしさのバトン", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気づき","行動","関わり"] },
-  { grade: 3, title: "さと子の落とし物", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","気持ち","関係","行動"] },
-  { grade: 3, title: "心をしずめて", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","落ち着く","考える"] },
-  { grade: 3, title: "あこがれの人", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["自分","努力","勇気","迷い","成長"] },
-  { grade: 3, title: "ふろしき", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","文化","工夫","大切","誇り"] },
-  { grade: 3, title: "同じ小学校でも", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["違い","文化","理解","尊重","交流"] },
-  { grade: 3, title: "13 学級しょうかい", domain: "C", theme: "よりよい学校生活", aim: "（ねらいは後で入力）", keywords: ["学校","仲間","協力","役割","関わり"] },
-  { grade: 3, title: "あの日のこと", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","支え","気づき","思い"] },
-  { grade: 3, title: "同じなかまだから", domain: "C", theme: "みんななかま", aim: "（ねらいは後で入力）", keywords: ["仲間","公平","理解","尊重","関わり"] },
-  { grade: 3, title: "バスの中で", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["思いやり","公共","配慮","気づき","行動"] },
-  { grade: 3, title: "月 1 21 お母さんの", domain: "C", theme: "家族愛、家庭生活の充実", aim: "（ねらいは後で入力）", keywords: ["家族","思い","支え","感謝","つながり"] },
-  { grade: 3, title: "まどガラスと魚", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","素直","気持ち","判断","行動"] },
-  { grade: 3, title: "水族館ではたらく", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["仕事","役割","責任","協力","続ける"] },
-  { grade: 3, title: "助かった命", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","支え","気づき","大切","感謝"] },
-  { grade: 3, title: "これ、全部東京産", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["地域","よさ","誇り","産業","大切"] },
-  { grade: 3, title: "31 いつもありがとう", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","ありがとう","気づき","支え","思い"] },
-  { grade: 3, title: "ダブルブッキング", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["判断","約束","誠実","選択","責任"] },
-  { grade: 3, title: "光の星", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","不思議","自然","思い","大切"] },
-
-  // --- 4年 ---
-  { grade: 4, title: "ブルラッシュ", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["違い","文化","理解","尊重","交流"] },
-  { grade: 4, title: "さち子のえがお", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["自分","よさ","自信","気づき","行動"] },
-  { grade: 4, title: "いのちをふきこめ", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","気づき","支え","思い"] },
-  { grade: 4, title: "ちこく", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
-  { grade: 4, title: "8 決めつけないで", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["決めつけ","公平","理解","尊重","関わり"] },
-  { grade: 4, title: "ぼくの草取り体験", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["仕事","役割","責任","協力","継続"] },
-  { grade: 4, title: "家族の一員として", domain: "C", theme: "家族愛、家庭生活の充実", aim: "（ねらいは後で入力）", keywords: ["家族","役割","協力","思い","支え"] },
-  { grade: 4, title: "花さき山", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","思いやり","行動","気づき","大切"] },
-  { grade: 4, title: "遠足の朝", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["勇気","関わり","選択","気持ち","行動"] },
-  { grade: 4, title: "いじりといじめ", domain: "C", theme: "よりよい集団生活", aim: "（ねらいは後で入力）", keywords: ["いじめ","関係","気づき","言葉","思いやり"] },
-  { grade: 4, title: "お父さんのじまん", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","誇り","家族","仕事","大切"] },
-  { grade: 4, title: "とびらの前で", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気づき","行動","関係"] },
-  { grade: 4, title: "新次のしょうぎ", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","誠実","信頼","判断","行動"] },
-  { grade: 4, title: "雨ととの様", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","理由","守る"] },
-  { grade: 4, title: "朝がくると", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","支え","気づき","ありがとう","思い"] },
-  { grade: 4, title: "金色の魚", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","欲","気持ち","判断","行動"] },
-  { grade: 4, title: "三つのつつみ", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["思いやり","気づき","行動","関係","大切"] },
-  { grade: 4, title: "よわむし太郎", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["勇気","自分","挑戦","気づき","行動"] },
-  { grade: 4, title: "かわいそうなぞう", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","戦争","気づき","思い"] },
-  // ※PDF抽出で「ー海をわたった」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 4, title: "ー海をわたった", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","歴史","誇り","学ぶ","大切"] },
-
-  // --- 5年 ---
-  { grade: 5, title: "のび太に学ぼう", domain: "D", theme: "よりよく生きる喜び", aim: "（ねらいは後で入力）", keywords: ["よりよく生きる","喜び","気づき","成長","大切"] },
-  { grade: 5, title: "あいさつの心", domain: "B", theme: "礼儀", aim: "（ねらいは後で入力）", keywords: ["礼儀","あいさつ","言葉","相手","配慮"] },
-  { grade: 5, title: "「命」", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","支え","気づき","思い"] },
-  { grade: 5, title: "恩返しを", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","支え","気づき","ありがとう","思い"] },
-  { grade: 5, title: "サタデーグループ", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["協力","役割","責任","公共","継続"] },
-  { grade: 5, title: "古いバケツ", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","関係","気持ち","行動"] },
-  { grade: 5, title: "和太鼓調べ", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","文化","伝統","誇り","大切"] },
-  { grade: 5, title: "ことばのカタチ", domain: "A", theme: "個性の伸長", aim: "（ねらいは後で入力）", keywords: ["個性","言葉","よさ","気づき","自分"] },
-  { grade: 5, title: "母さんの歌", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","思い","気づき","大切","心"] },
-  { grade: 5, title: "のりづけされた詩", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","誠実","信頼","気持ち","行動"] },
-  { grade: 5, title: "真由、班長になる", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["責任","協力","役割","集団","行動"] },
-  { grade: 5, title: "名前のない手紙", domain: "C", theme: "正義の実現", aim: "（ねらいは後で入力）", keywords: ["正義","公平","思いやり","気づき","行動"] },
-  { grade: 5, title: "折れたタワー", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
-  { grade: 5, title: "父の仕事", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["仕事","役割","責任","公共","誇り"] },
-  { grade: 5, title: "流行おくれ", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","気持ち","判断","自分","行動"] },
-  { grade: 5, title: "家族のために", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["家族","思い","支え","協力","行動"] },
-  { grade: 5, title: "うばわれた自由", domain: "A", theme: "自由とは", aim: "（ねらいは後で入力）", keywords: ["自由","責任","選択","考える","行動"] },
-  { grade: 5, title: "森の絵", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["協力","やり遂げる","役割","集団","行動"] },
-  { grade: 5, title: "すれちがい", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
-  { grade: 5, title: "ながらって……", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","習慣","気づき","生活","行動"] },
-  { grade: 5, title: "これって不公平？", domain: "C", theme: "公平と不公平", aim: "（ねらいは後で入力）", keywords: ["公平","不公平","立場","気づき","考える"] },
-  { grade: 5, title: "かぜのでんわ", domain: "D", theme: "よりよく生きる喜び", aim: "（ねらいは後で入力）", keywords: ["よりよく生きる","喜び","気づき","思い","大切"] },
-
-  // --- 6年 ---
-  // ※PDF抽出で「2」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 6, title: "2", domain: "A", theme: "自由と責任", aim: "（ねらいは後で入力）", keywords: ["自由","責任","選択","判断","行動"] },
-  { grade: 6, title: "言葉のおくりもの", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","言葉","気持ち","関係"] },
-  { grade: 6, title: "命のアサガオ", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","支え","気づき","思い"] },
-  { grade: 6, title: "先着100名様", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","判断","行動"] },
-  // ※PDF抽出で「ーワンガリ・マー」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 6, title: "ーワンガリ・マー", domain: "D", theme: "自然愛護", aim: "（ねらいは後で入力）", keywords: ["自然","環境","行動","尊重","つながり"] },
-  { grade: 6, title: "8 カスミと携帯電話", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","情報","判断","使い方","責任"] },
-  { grade: 6, title: "ぼくたちの学校", domain: "C", theme: "よりよい学校生活", aim: "（ねらいは後で入力）", keywords: ["学校","協力","役割","愛着","行動"] },
-  { grade: 6, title: "男", domain: "A", theme: "真理の探究", aim: "（ねらいは後で入力）", keywords: ["真理","考える","探究","判断","行動"] },
-  { grade: 6, title: "おかげさまで", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","支え","気づき","ありがとう","思い"] },
-  { grade: 6, title: "初めてのアンカー", domain: "C", theme: "家族の幸せ", aim: "（ねらいは後で入力）", keywords: ["家族","幸せ","支え","気づき","思い"] },
-  { grade: 6, title: "貝塚博士", domain: "A", theme: "個性の伸長", aim: "（ねらいは後で入力）", keywords: ["個性","よさ","自分","気づき","自信"] },
-  { grade: 6, title: "ぼくだって", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
-  { grade: 6, title: "ロレンゾの友達", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","違い","理解","関係"] },
-  { grade: 6, title: "18 よみがえらせる", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","文化","誇り","学ぶ","大切"] },
-  // ※PDF抽出で「ー日本とトルコのつ」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 6, title: "ー日本とトルコのつ", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["国際理解","交流","違い","尊重","友情"] },
-  { grade: 6, title: "自由行動", domain: "A", theme: "自由の難しさ", aim: "（ねらいは後で入力）", keywords: ["自由","責任","判断","迷い","行動"] },
-  // ※PDF抽出で「ー大勢の人の命を」になっていたもの。正式名称が分かったら差し替えOK
-  { grade: 6, title: "ー大勢の人の命を", domain: "C", theme: "社会参画", aim: "（ねらいは後で入力）", keywords: ["社会","行動","できること","協力","責任"] },
-  { grade: 6, title: "青の洞門", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","尊敬","行動","思い","大切"] },
-  { grade: 6, title: "最後のおくり物", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気づき","行動","関係"] },
-  { grade: 6, title: "消えた本", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","判断","行動"] },
+/**
+ * ✅ 教材マスタ（任意）
+ * ここに domain / theme / aim が入っている教材は、より精度が上がります。
+ * 入っていない教材は「自動推定」で aim / theme を作ります。
+ *
+ * まずは最小限だけ入れておき、必要に応じて増やしてOK。
+ */
+const LESSONS_MASTER = [
+  // 例：2年
+  { grade: 2, title: "大きく なったね", domain: "D", theme: "生命の尊さ", aim: "" },
+  { grade: 2, title: "金の おの", domain: "A", theme: "正直、誠実", aim: "" },
+  { grade: 2, title: "がんばって", domain: "C", theme: "勤労、公共の精神", aim: "" },
+  { grade: 2, title: "ぽんたと かんた", domain: "A", theme: "善悪の判断・自律", aim: "" },
+  { grade: 2, title: "一りん車", domain: "C", theme: "規則の尊重", aim: "" },
+  { grade: 2, title: "がまんできなくて", domain: "A", theme: "節度、節制", aim: "" },
+  { grade: 2, title: "ぎおんまつり", domain: "C", theme: "国や郷土を愛する", aim: "" },
+  { grade: 2, title: "あぶないよ", domain: "A", theme: "節度、節制（安全）", aim: "" },
+  { grade: 2, title: "ねえ、聞いて", domain: "B", theme: "友情、信頼", aim: "" },
+  { grade: 2, title: "きつねと ぶどう", domain: "B", theme: "感謝", aim: "" },
+  { grade: 2, title: "わりこみ", domain: "A", theme: "善悪の判断", aim: "" },
+  { grade: 2, title: "お月さまと コロ", domain: "A", theme: "正直、誠実", aim: "" },
+  { grade: 2, title: "やくそく", domain: "D", theme: "生命の尊さ", aim: "" },
+  { grade: 2, title: "くりの み", domain: "B", theme: "親切、思いやり", aim: "" },
+  { grade: 2, title: "ぐみの木と 小鳥", domain: "B", theme: "親切、思いやり", aim: "" },
+  { grade: 2, title: "七つの 星", domain: "D", theme: "感動、畏敬の念", aim: "" },
 ];
 
-// =======================
-// 固定ルール
-// =======================
+// ====== 固定ルール ======
 const MIN_CHARS = 110;
 const MAX_CHARS = 120;
 
@@ -154,6 +53,7 @@ const NG_PHRASES = [
   "理解を深めることができました",
   "心情が育ちました",
   "守ることができました",
+  "高めることができました",
 ];
 
 // 文字数（空白除外）
@@ -169,6 +69,7 @@ function sanitize(text) {
   out = out.replaceAll("理解を深めることができました", "考えを深めました");
   out = out.replaceAll("心情が育ちました", "思いを深めました");
   out = out.replaceAll("守ることができました", "大切にしようとする思いを深めました");
+  out = out.replaceAll("高めることができました", "思いを深めました");
   for (const ng of NG_PHRASES) out = out.replaceAll(ng, "");
   return out;
 }
@@ -219,63 +120,226 @@ function adjustToRange(text, minChars, maxChars) {
   if (countChars(out) > maxChars) {
     for (const f of fillers) {
       if (countChars(out) <= maxChars) break;
-      out = out.replaceAll(f, "");
+      out = out.replace(f, "");
     }
   }
-
   return out;
 }
 
-// 3文構成の骨格
+function normalizeTitle(t) {
+  return (t || "")
+    .replace(/\s+/g, "")
+    .replace(/　/g, "")
+    .replace(/^[0-9０-９]+/g, "")
+    .replace(/^[‐\-–—ー]+/g, "");
+}
+
+function cleanTitle(t) {
+  const raw = (t || "").trim();
+  // 先頭の番号っぽいもの除去（例: "8 カスミと携帯電話" は残したいので、数字+スペースは残す）
+  // ただし "13 学級しょうかい" のようなものはタイトルとして使ってもOKなのでそのまま。
+  return raw.replace(/\s{2,}/g, " ").trim();
+}
+
+// domain/theme がない教材でも「それっぽく」推定する
+function inferDomainTheme(title) {
+  const t = normalizeTitle(title);
+
+  // 超ざっくり辞書（増やしてOK）
+  const rules = [
+    { k: ["ありがとう", "おかげ", "恩返し"], domain: "B", theme: "感謝" },
+    { k: ["あいさつ", "礼儀", "聞いて"], domain: "B", theme: "礼儀" },
+    { k: ["友", "なかよし", "ロレンゾ", "信頼", "バトン"], domain: "B", theme: "友情、信頼" },
+    { k: ["親切", "思いやり", "くり", "とびら"], domain: "B", theme: "親切、思いやり" },
+    { k: ["きまり", "規則", "先着", "消えた本", "一りん車"], domain: "C", theme: "規則の尊重" },
+    { k: ["郷土", "まつり", "和太鼓", "ふろしき"], domain: "C", theme: "国や郷土を愛する" },
+    { k: ["公", "不公平", "公平"], domain: "C", theme: "公正、公平" },
+    { k: ["係", "仕事", "はたらく", "サタデー", "父の仕事"], domain: "C", theme: "勤労、公共の精神" },
+    { k: ["命", "生命", "アサガオ", "かわいそうなぞう", "大きく"], domain: "D", theme: "生命の尊さ" },
+    { k: ["自然", "つばめ", "星", "洞門"], domain: "D", theme: "自然愛護／感動、畏敬の念" },
+    { k: ["正直", "斧", "しょうぎ"], domain: "A", theme: "正直、誠実" },
+    { k: ["がまん", "節度", "流行", "ながら"], domain: "A", theme: "節度、節制" },
+  ];
+
+  for (const r of rules) {
+    if (r.k.some((kw) => t.includes(normalizeTitle(kw)))) return { domain: r.domain, theme: r.theme };
+  }
+  // 迷ったら汎用
+  return { domain: "B", theme: "よりよい生き方" };
+}
+
+// aim（ねらい）を「それっぽく」自動生成（全学年対応）
+function deriveAim({ grade, domain, theme }) {
+  const g = Number(grade || 0);
+
+  // 学年によって表現をほんの少し変える
+  const level = g <= 2 ? "気づき、" : g <= 4 ? "理解し、" : "自覚し、";
+
+  const map = {
+    A: {
+      "正直、誠実": `正直に行動するよさに${level}自分の言動を見つめて正しい選択をしようとする。`,
+      "節度、節制": `自分の気持ちや生活を整える大切さに${level}落ち着いて行動しようとする。`,
+      "善悪の判断・自律": `よいこととよくないことを${level}自分で考えて判断し、行動を選ぼうとする。`,
+      "善悪の判断": `してよいこと・いけないことを${level}自分で判断して行動しようとする。`,
+      "個性の伸長": `自分や友達のよさに${level}互いを認めながら自信をもって行動しようとする。`,
+      "自由と責任": `自由には責任が伴うことを${level}周りへの影響を考えて行動しようとする。`,
+      "真理の探究": `物事を深く考える大切さに${level}理由を確かめながら学びを広げようとする。`,
+    },
+    B: {
+      "感謝": `周りの支えや思いに${level}「ありがとう」を言葉や行動で伝えようとする。`,
+      "礼儀": `場に合った言葉や態度の大切さに${level}相手を大切にして関わろうとする。`,
+      "友情、信頼": `友達の思いを${level}互いに助け合い、信頼して関係を深めようとする。`,
+      "親切、思いやり": `相手の立場に立って考えることを${level}進んで親切にしようとする。`,
+      "相互理解、寛容": `考えの違いを認め合うことを${level}相手の気持ちに寄り添って関わろうとする。`,
+    },
+    C: {
+      "規則の尊重": `きまりの意味を${level}みんなが安心して過ごせるように守って行動しようとする。`,
+      "公正、公平": `立場や好き嫌いにとらわれず公平に接することを${level}誰にでも同じように関わろうとする。`,
+      "勤労、公共の精神": `みんなのために働くことの大切さを${level}役割を果たして協力しようとする。`,
+      "国や郷土を愛する": `地域のよさや伝統に${level}郷土に親しみ、関わりを大切にしようとする。`,
+      "国際理解、国際親善": `文化や考え方の違いを${level}相手を尊重して仲よく関わろうとする。`,
+      "正義の実現": `正しいことを行う難しさに${level}みんなのために勇気をもって行動しようとする。`,
+      "よりよい学校生活": `よりよい集団づくりを${level}自分にできることを考えて行動しようとする。`,
+      "家族愛、家庭生活の充実": `家族の支えや思いに${level}感謝し、役割を果たそうとする。`,
+    },
+    D: {
+      "生命の尊さ": `命の大切さに${level}自分や周りの命を大事にしようとする。`,
+      "自然愛護": `身近な自然や生き物に親しみ${level}命を大切にして関わろうとする。`,
+      "感動、畏敬の念": `自然や物語に触れて感じたことを${level}心に残し、大切に受け止めようとする。`,
+      "よりよく生きる喜び": `よりよく生きようとする思いを${level}自分の生活につなげて行動しようとする。`,
+    },
+  };
+
+  // theme文字列から一番近いキーを探す（ゆるく）
+  const bucket = map[domain] || map.B;
+  const keys = Object.keys(bucket);
+  const foundKey =
+    keys.find((k) => (theme || "").includes(k)) ||
+    keys.find((k) => normalizeTitle(theme).includes(normalizeTitle(k))) ||
+    (domain === "D" ? "生命の尊さ" : domain === "C" ? "規則の尊重" : domain === "A" ? "善悪の判断・自律" : "親切、思いやり");
+
+  return bucket[foundKey] || `よりよい生き方について${level}これからの生活に生かそうとする。`;
+}
+
+// 3文構成の骨格（所見）
 function buildDraft({ title, theme, aim, keywords }, variant) {
-  const kw = keywords?.[variant % (keywords?.length || 1)] || "気づき";
+  const pool = keywords?.length ? keywords : ["気持ち", "理由", "行動", "関わり", "自分事"];
+  const kw = pool[variant % pool.length];
 
   const s1 = `「${title}」の学習では、${theme}に関わる大切さについて考えました。`;
   const s2 = `登場人物の気持ちを自分に置き換え、${kw}に着目しながら、感じたことを出し合って話し合いました。`;
-  const end = variant % 2 === 0 ? "思いを深めました。" : "思いを高めることができました。";
-  const s3 = `学習を通して、${aim}と結び付けて、これからの生活に生かそうとする${end}`;
+  const s3 = `学習を通して、${aim}これからの生活に生かそうとする思いを深めました。`;
   return `${s1}${s2}${s3}`;
 }
 
-function normalizeTitle(t) {
-  return (t || "").replace(/\s+/g, "").replace(/　/g, "");
-}
+// MATERIALS_JSON + LESSONS_MASTER を統合して “全学年” の教材配列を作る
+function buildLessonsAll() {
+  const byKey = new Map();
 
-function getLesson(title) {
-  const n = normalizeTitle(title);
-  return LESSONS.find((l) => normalizeTitle(l.title) === n) || null;
-}
+  // 1) JSON（タイトル一覧）から作る
+  const jsonKeys = Object.keys(MATERIALS_JSON || {});
+  for (const k of jsonKeys) {
+    const grade = Number(k);
+    const titles = MATERIALS_JSON[k] || MATERIALS_JSON[grade] || [];
+    for (const t of titles) {
+      const title = cleanTitle(String(t));
+      if (!title) continue;
+      const key = `${grade}::${normalizeTitle(title)}`;
+      if (!byKey.has(key)) {
+        const { domain, theme } = inferDomainTheme(title);
+        byKey.set(key, { grade, title, domain, theme, aim: "", keywords: [] });
+      }
+    }
+  }
 
-// 表示用：候補
-function suggestLessons(q) {
-  const n = normalizeTitle(q);
-  if (!n) return LESSONS.slice(0, 50);
-  return LESSONS.filter((l) => normalizeTitle(l.title).includes(n)).slice(0, 50);
+  // 2) マスタ（domain/theme/aimがある分）で上書き
+  for (const m of LESSONS_MASTER) {
+    const grade = Number(m.grade);
+    const title = cleanTitle(m.title);
+    const key = `${grade}::${normalizeTitle(title)}`;
+    const base = byKey.get(key) || { grade, title };
+    const domain = m.domain || base.domain || inferDomainTheme(title).domain;
+    const theme = m.theme || base.theme || inferDomainTheme(title).theme;
+    byKey.set(key, {
+      grade,
+      title,
+      domain,
+      theme,
+      aim: m.aim || base.aim || "",
+      keywords: m.keywords || base.keywords || [],
+    });
+  }
+
+  // 3) aim が空のものは自動生成
+  const out = Array.from(byKey.values()).map((l) => {
+    const aim = (l.aim || "").trim() ? l.aim.trim() : deriveAim(l);
+    const theme = (l.theme || "").trim() ? l.theme.trim() : inferDomainTheme(l.title).theme;
+    const domain = (l.domain || "").trim() ? l.domain.trim() : inferDomainTheme(l.title).domain;
+    const keywords =
+      l.keywords?.length
+        ? l.keywords
+        : domain === "A"
+        ? ["判断", "選択", "自分", "整える", "行動"]
+        : domain === "B"
+        ? ["気持ち", "思いやり", "関わり", "言葉", "相手"]
+        : domain === "C"
+        ? ["きまり", "協力", "役割", "みんな", "社会"]
+        : ["命", "自然", "気づき", "大切", "つながり"];
+
+    return { ...l, domain, theme, aim, keywords };
+  });
+
+  // 学年→タイトル順にソート
+  out.sort((a, b) => (a.grade !== b.grade ? a.grade - b.grade : a.title.localeCompare(b.title, "ja")));
+  return out;
 }
 
 export default function App() {
+  const [grade, setGrade] = useState(2);
   const [title, setTitle] = useState("");
   const [count, setCount] = useState(5);
   const [results, setResults] = useState([]);
+  const [q, setQ] = useState("");
 
-  const lesson = useMemo(() => getLesson(title.trim()), [title]);
-  const suggestions = useMemo(() => suggestLessons(title), [title]);
+  const LESSONS_ALL = useMemo(() => buildLessonsAll(), []);
+
+  const gradeLessons = useMemo(() => {
+    const list = LESSONS_ALL.filter((l) => Number(l.grade) === Number(grade));
+    const nq = normalizeTitle(q);
+    if (!nq) return list;
+    return list.filter((l) => normalizeTitle(l.title).includes(nq));
+  }, [LESSONS_ALL, grade, q]);
+
+  const selected = useMemo(() => {
+    const n = normalizeTitle(title);
+    return LESSONS_ALL.find((l) => Number(l.grade) === Number(grade) && normalizeTitle(l.title) === n) || null;
+  }, [LESSONS_ALL, grade, title]);
 
   const generate = () => {
     if (!title.trim()) return;
 
     const base =
-      lesson || {
-        title: title.trim(),
-        domain: "",
-        theme: "よりよい生き方",
-        aim: "自分の生活を見直す",
-        keywords: ["心の動き", "判断", "関わり", "思いやり", "自分事"],
-      };
+      selected ||
+      (() => {
+        const { domain, theme } = inferDomainTheme(title.trim());
+        const tmp = { grade, title: title.trim(), domain, theme, aim: "" };
+        return {
+          ...tmp,
+          aim: deriveAim(tmp),
+          keywords:
+            domain === "A"
+              ? ["判断", "選択", "自分", "整える", "行動"]
+              : domain === "B"
+              ? ["気持ち", "思いやり", "関わり", "言葉", "相手"]
+              : domain === "C"
+              ? ["きまり", "協力", "役割", "みんな", "社会"]
+              : ["命", "自然", "気づき", "大切", "つながり"],
+        };
+      })();
 
     const out = [];
-    for (let i = 0; i < count; i++) {
-      let text = buildDraft(base, i);
+    for (let i = 0; i < Math.min(10, Math.max(1, Number(count || 1))); i++) {
+      let text = buildDraft(base, base.theme, base.aim, base.keywords, i);
       text = sanitize(text);
       text = adjustToRange(text, MIN_CHARS, MAX_CHARS);
       out.push(text);
@@ -284,101 +348,184 @@ export default function App() {
   };
 
   const copyText = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      alert("コピーしました");
-    } catch (e) {
-      // iOS/Safari等の制限対策：選択して手動コピー
-      alert("自動コピーできませんでした。テキストを選択して手動でコピーしてください。");
-    }
+    await navigator.clipboard.writeText(text);
+    alert("コピーしました");
   };
 
+  const wrapStyle = {
+    maxWidth: 980,
+    margin: "24px auto",
+    padding: "0 16px",
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif',
+  };
+
+  const card = {
+    background: "#fff",
+    border: "1px solid #e5e7eb",
+    borderRadius: 16,
+    boxShadow: "0 1px 8px rgba(0,0,0,0.04)",
+  };
+
+  const pad = { padding: 16 };
+
+  const label = { fontSize: 12, color: "#374151", marginBottom: 6, display: "block" };
+  const input = {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: 12,
+    border: "1px solid #d1d5db",
+    outline: "none",
+    fontSize: 14,
+  };
+
+  const btn = {
+    padding: "10px 12px",
+    borderRadius: 12,
+    border: "1px solid #d1d5db",
+    cursor: "pointer",
+    background: "#fff",
+    fontWeight: 600,
+  };
+
+  const btnPrimary = { ...btn, background: "#111827", color: "#fff", border: "1px solid #111827" };
+
   return (
-    <div className="wrap">
-      <div className="topBar">
-        <h1 className="title">道徳所見ジェネレーター（110〜120字）</h1>
-        <span className="pill">{lesson ? `${lesson.grade}年生` : "学年未選択"}</span>
+    <div style={wrapStyle}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+        <h1 style={{ fontSize: 20, margin: 0 }}>道徳所見ジェネレーター（{MIN_CHARS}〜{MAX_CHARS}字）</h1>
+        <span
+          style={{
+            fontSize: 12,
+            padding: "4px 10px",
+            borderRadius: 999,
+            border: "1px solid #e5e7eb",
+            background: "#f9fafb",
+          }}
+        >
+          全学年対応
+        </span>
       </div>
 
-      <div className="warn">
-        <b>運用メモ：</b>児童名など個人情報は入力しないでください（所見は教材ベースで生成します）。
+      <div style={{ marginBottom: 12, fontSize: 13, color: "#374151" }}>
+        <b>運用メモ：</b>児童名など個人情報は入力しないでください（教材ベースで生成します）。
       </div>
 
-      <div style={{ height: 12 }} />
+      <div style={card}>
+        <div style={pad}>
+          <div style={{ display: "grid", gridTemplateColumns: "160px 1fr 220px", gap: 12 }}>
+            <div>
+              <label style={label}>学年</label>
+              <select style={input} value={grade} onChange={(e) => { setGrade(Number(e.target.value)); setTitle(""); setResults([]); }}>
+                {[1, 2, 3, 4, 5, 6].map((g) => (
+                  <option key={g} value={g}>
+                    {g}年生
+                  </option>
+                ))}
+              </select>
+              <div style={{ marginTop: 8, fontSize: 12, color: "#6b7280" }}>
+                教材数：{LESSONS_ALL.filter((l) => Number(l.grade) === Number(grade)).length}件
+              </div>
+            </div>
 
-      <div className="card">
-        <div className="cardPad">
-          <div className="row">
-            <div className="col">
-              <label>教材名</label>
+            <div>
+              <label style={label}>教材名（学年で絞り込み）</label>
               <input
+                style={input}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="例：ぽんたと かんた / 金の おの / ぎおんまつり など"
+                placeholder="候補から選ぶか、自由入力もOK"
                 list="lesson-list"
               />
               <datalist id="lesson-list">
-                {suggestions.map((l) => (
+                {gradeLessons.slice(0, 200).map((l) => (
                   <option key={`${l.grade}-${l.title}`} value={l.title} />
                 ))}
               </datalist>
 
-              <div className="muted">
-                {lesson ? (
-                  <>
-                    登録教材：<span className="kbd">{lesson.domain}</span> ／ {lesson.theme}
-                  </>
-                ) : (
-                  <>未登録教材：汎用モードで生成します（教材を追加すると精度が上がります）</>
-                )}
+              <div style={{ marginTop: 8, display: "flex", gap: 8, alignItems: "center" }}>
+                <input
+                  style={{ ...input, width: "55%" }}
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="候補の検索（例：命 / まつり / 友だち）"
+                />
+                <div style={{ fontSize: 12, color: "#6b7280" }}>
+                  {selected ? (
+                    <>
+                      登録：<b>{selected.domain}</b> ／ {selected.theme} ／ <span>ねらい自動入力済み</span>
+                    </>
+                  ) : (
+                    <>未登録教材：自動推定で生成します</>
+                  )}
+                </div>
               </div>
+
+              {selected && (
+                <div style={{ marginTop: 8, fontSize: 12, color: "#374151" }}>
+                  <b>ねらい（aim）：</b>
+                  {selected.aim}
+                </div>
+              )}
             </div>
 
-            <div className="col" style={{ maxWidth: 240 }}>
-              <label>出力本数（1〜10）</label>
+            <div>
+              <label style={label}>出力本数（1〜10）</label>
               <input
+                style={input}
                 type="number"
                 min={1}
                 max={10}
                 value={count}
                 onChange={(e) => setCount(Number(e.target.value))}
               />
-              <div className="muted">字数は自動で{MIN_CHARS}〜{MAX_CHARS}字に調整します</div>
-            </div>
-
-            <div className="col" style={{ maxWidth: 220 }}>
-              <button className="btn btnPrimary" onClick={generate} style={{ width: "100%" }}>
-                所見を生成する
-              </button>
-              <div className="muted small">ヒント：候補は入力欄の下矢印でも出ます</div>
+              <div style={{ marginTop: 10 }}>
+                <button style={{ ...btnPrimary, width: "100%" }} onClick={generate}>
+                  所見を生成する
+                </button>
+              </div>
+              <div style={{ marginTop: 8, fontSize: 12, color: "#6b7280" }}>
+                字数は自動で{MIN_CHARS}〜{MAX_CHARS}字に調整します
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ height: 16 }} />
-
       {results.length > 0 && (
-        <div className="list">
+        <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
           {results.map((text, i) => (
-            <div key={i} className="card">
-              <div className="cardPad">
-                <div className="resultMeta">
-                  <span>字数：{countChars(text)}</span>
-                  <button className="btn btnSecondary" onClick={() => copyText(text)}>
+            <div key={i} style={card}>
+              <div style={pad}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                  <span style={{ fontSize: 12, color: "#6b7280" }}>字数：{countChars(text)}</span>
+                  <button style={btn} onClick={() => copyText(text)}>
                     コピー
                   </button>
                 </div>
-                <textarea value={text} readOnly />
+                <textarea
+                  value={text}
+                  readOnly
+                  style={{
+                    width: "100%",
+                    height: 110,
+                    borderRadius: 12,
+                    border: "1px solid #e5e7eb",
+                    padding: 12,
+                    fontSize: 14,
+                    lineHeight: 1.7,
+                    resize: "vertical",
+                  }}
+                />
               </div>
             </div>
           ))}
         </div>
       )}
 
-      <div style={{ height: 24 }} />
-      <div className="muted">
-        ※この版はローカル生成（テンプレ＋検査）です。将来、API版に差し替えても「字数調整／NG回避」はそのまま使えます。
+      <div style={{ marginTop: 18, fontSize: 12, color: "#6b7280" }}>
+        ※ aim（ねらい）は、教材データに入っていない場合でも domain / theme から自動生成します。<br />
+        ※ もしテーマ推定がズレる教材があれば、LESSONS_MASTER に1行だけ追加すると一気に精度が上がります。
       </div>
     </div>
   );
