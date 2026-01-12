@@ -1,817 +1,17 @@
 import React, { useMemo, useState } from "react";
 
-// ====== 教材マスタ（今ある範囲） ======
-[
-  {
-    "grade": 1,
-    "title": "ありがとう",
-    "domain": "B",
-    "theme": "感謝",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "ふたりの ゆうた",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "なかよし",
-    "domain": "B",
-    "theme": "友情、信頼",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "あとかたづけ",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "どうしてかな",
-    "domain": "C",
-    "theme": "規則の尊重",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "つばめ",
-    "domain": "D",
-    "theme": "自然愛護",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "11",
-    "domain": "C",
-    "theme": "国際理解、国際親善",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "かぼちゃの つる",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "おふろばそうじ",
-    "domain": "A",
-    "theme": "いたか。〈道徳ノート・発言〉",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "おおひとやま",
-    "domain": "C",
-    "theme": "規則の尊重",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "ひむかかるた",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "ふたりだけで",
-    "domain": "C",
-    "theme": "だれとでも",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "休みじかん",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 1,
-    "title": "花の かんむり",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "大きく なったね",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "金の おの",
-    "domain": "A",
-    "theme": "正直、誠実",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "がんばって",
-    "domain": "C",
-    "theme": "勤労、公共の精神",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "ぽんたと かんた",
-    "domain": "A",
-    "theme": "ることを理解し、自らよいと思うことを進",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "一りん車",
-    "domain": "C",
-    "theme": "規則の尊重",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "がまんできなくて",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "ーアンリ・ファーブ",
-    "domain": "D",
-    "theme": "自然愛護",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "三びきは 友だち",
-    "domain": "C",
-    "theme": "いにとらわれず、誰に対しても、えこひい",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "ぎおんまつり",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "こめられた",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "あぶないよ",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "ねえ、聞いて",
-    "domain": "B",
-    "theme": "礼儀",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "きつねと ぶどう",
-    "domain": "B",
-    "theme": "感謝",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "わりこみ",
-    "domain": "A",
-    "theme": "いけない",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "お月さまと コロ",
-    "domain": "A",
-    "theme": "正直、誠実",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "やくそく",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "23",
-    "domain": "C",
-    "theme": "たでしょう。",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "くりの み",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "ぐみの木と 小鳥",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 2,
-    "title": "七つの 星",
-    "domain": "D",
-    "theme": "感動、畏敬の念",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "やさしさのバトン",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "さと子の落とし物",
-    "domain": "B",
-    "theme": "友情、信頼",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "心をしずめて",
-    "domain": "B",
-    "theme": "相互理解、寛容",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "あこがれの人",
-    "domain": "A",
-    "theme": "が、弱い心に負けず自分の自信につながる",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "ふろしき",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "同じ小学校でも",
-    "domain": "C",
-    "theme": "国際理解、国際親善",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "13 学級しょうかい",
-    "domain": "C",
-    "theme": "よりよい学校生活、",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "あの日のこと",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "同じなかまだから",
-    "domain": "C",
-    "theme": "みんななかま",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "バスの中で",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "月 1 21 お母さんの",
-    "domain": "C",
-    "theme": "家族愛、家庭生活の",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "まどガラスと魚",
-    "domain": "A",
-    "theme": "正直、誠実",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "水族館ではたらく",
-    "domain": "C",
-    "theme": "勤労、公共の精神",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "助かった命",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "これ、全部東京産",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "31 いつもありがとう",
-    "domain": "B",
-    "theme": "感謝",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "ダブルブッキング",
-    "domain": "A",
-    "theme": "いることに気づき、正しいと考えたことを",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 3,
-    "title": "光の星",
-    "domain": "D",
-    "theme": "感動、畏敬の念",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "ブルラッシュ",
-    "domain": "C",
-    "theme": "国際理解、国際親善",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "さち子のえがお",
-    "domain": "A",
-    "theme": "ことによって、自信をもって生活できるこ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "いのちをふきこめ",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "ちこく",
-    "domain": "B",
-    "theme": "相互理解、寛容",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "8 決めつけないで",
-    "domain": "C",
-    "theme": "顔あふれる集団になっていくことを理解",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "ぼくの草取り体験",
-    "domain": "C",
-    "theme": "勤労、公共の精神",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "家族の一員として",
-    "domain": "C",
-    "theme": "家族の一員",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "花さき山",
-    "domain": "D",
-    "theme": "感動、畏敬の念",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "遠足の朝",
-    "domain": "A",
-    "theme": "◎「なおみさん、わたしたちのグループに入ってくれない。」と声を掛け",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "いじりといじめ",
-    "domain": "C",
-    "theme": "とがよりよい集団を作ることに気づき、分",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "お父さんのじまん",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "とびらの前で",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "新次のしょうぎ",
-    "domain": "A",
-    "theme": "正直、誠実",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "雨ととの様",
-    "domain": "C",
-    "theme": "規則の尊重",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "朝がくると",
-    "domain": "B",
-    "theme": "感謝",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "金色の魚",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "三つのつつみ",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "よわむし太郎",
-    "domain": "A",
-    "theme": "思ったことは",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "かわいそうなぞう",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 4,
-    "title": "ー海をわたった",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "のび太に学ぼう",
-    "domain": "D",
-    "theme": "よりよく生きる喜び",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "あいさつの心",
-    "domain": "B",
-    "theme": "礼儀",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "「命」",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "恩返しを",
-    "domain": "B",
-    "theme": "感謝",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "サタデーグループ",
-    "domain": "C",
-    "theme": "勤労、公共の精神",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "古いバケツ",
-    "domain": "B",
-    "theme": "友情、信頼",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "和太鼓調べ",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "ことばのカタチ",
-    "domain": "A",
-    "theme": "個性の伸長",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "母さんの歌",
-    "domain": "D",
-    "theme": "感動、畏敬の念",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "のりづけされた詩",
-    "domain": "A",
-    "theme": "正直、誠実",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "真由、班長になる",
-    "domain": "C",
-    "theme": "て行動することが大切であることに気づ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "名前のない手紙",
-    "domain": "C",
-    "theme": "正義の実現",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "折れたタワー",
-    "domain": "B",
-    "theme": "相互理解、寛容",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "父の仕事",
-    "domain": "C",
-    "theme": "勤労、公共の精神",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "流行おくれ",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "家族のために",
-    "domain": "C",
-    "theme": "○言葉に詰まってしまったアキは、どんなことに気づいたでしょう。",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "うばわれた自由",
-    "domain": "A",
-    "theme": "自由とは",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "森の絵",
-    "domain": "C",
-    "theme": "やり遂げることで集団が成り立つことを理",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "すれちがい",
-    "domain": "B",
-    "theme": "相互理解、寛容",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "ながらって……",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "これって不公平？",
-    "domain": "C",
-    "theme": "公平と不公平",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 5,
-    "title": "かぜのでんわ",
-    "domain": "D",
-    "theme": "よりよく生きる喜び",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "2",
-    "domain": "A",
-    "theme": "自由と責任",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "言葉のおくりもの",
-    "domain": "B",
-    "theme": "友情、信頼",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "命のアサガオ",
-    "domain": "D",
-    "theme": "生命の尊さ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "先着100名様",
-    "domain": "C",
-    "theme": "規則の尊重",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "ーワンガリ・マー",
-    "domain": "D",
-    "theme": "自然愛護",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "8 カスミと携帯電話",
-    "domain": "A",
-    "theme": "節度、節制",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "ぼくたちの学校",
-    "domain": "C",
-    "theme": "や愛着を生むことを理解し、みんなで協力",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "男",
-    "domain": "A",
-    "theme": "真理の探究",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "おかげさまで",
-    "domain": "B",
-    "theme": "感謝",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "初めてのアンカー",
-    "domain": "C",
-    "theme": "家族の幸せ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "貝塚博士",
-    "domain": "A",
-    "theme": "個性の伸長",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "ぼくだって",
-    "domain": "B",
-    "theme": "相互理解、寛容",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "ロレンゾの友達",
-    "domain": "B",
-    "theme": "友情、信頼",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "18 よみがえらせる",
-    "domain": "C",
-    "theme": "国や郷土を愛する",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "ー日本とトルコのつ",
-    "domain": "C",
-    "theme": "国際理解、国際親善",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "自由行動",
-    "domain": "A",
-    "theme": "自由の難しさ",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "ー大勢の人の命を",
-    "domain": "C",
-    "theme": "できることを精一杯行動することで社会を",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "青の洞門",
-    "domain": "D",
-    "theme": "感動、畏敬の念",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "最後のおくり物",
-    "domain": "B",
-    "theme": "親切、思いやり",
-    "aim": "（ねらいは後で入力）"
-  },
-  {
-    "grade": 6,
-    "title": "消えた本",
-    "domain": "C",
-    "theme": "規則の尊重",
-    "aim": "（ねらいは後で入力）"
-  }
-]
-
-  
- // ====== 教材マスタ（ここだけ編集） ======
+// =======================
+// 教材マスタ（ここだけ編集）
+// =======================
 const LESSONS = [
-  // --- PDFから抽出した一覧（aimは後でOK） ---
+  // --- 1年 ---
   { grade: 1, title: "ありがとう", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","ありがとう","気づき","支え","思い"] },
   { grade: 1, title: "ふたりの ゆうた", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","考える","選ぶ","行動","自分"] },
   { grade: 1, title: "なかよし", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友達","信頼","気持ち","関わり","思いやり"] },
   { grade: 1, title: "あとかたづけ", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["片付け","節度","習慣","気づき","生活"] },
   { grade: 1, title: "どうしてかな", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","理由","安全","みんな","守る"] },
   { grade: 1, title: "つばめ", domain: "D", theme: "自然愛護", aim: "（ねらいは後で入力）", keywords: ["自然","生き物","命","観察","大切"] },
+  // ※PDF抽出で「11」になっていたもの。正式名称が分かったら差し替えOK
   { grade: 1, title: "11", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["違い","文化","交流","理解","尊重"] },
   { grade: 1, title: "かぼちゃの つる", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","順番","工夫","行動","気づき"] },
   { grade: 1, title: "おふろばそうじ", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["役割","習慣","続ける","気づき","生活"] },
@@ -821,28 +21,130 @@ const LESSONS = [
   { grade: 1, title: "休みじかん", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","切り替え","行動","考える","生活"] },
   { grade: 1, title: "花の かんむり", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気持ち","行動","関係"] },
 
+  // --- 2年 ---
   { grade: 2, title: "大きく なったね", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["成長","いのち","気づき","大切","家族"] },
   { grade: 2, title: "金の おの", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","本当","信頼","勇気","選択"] },
   { grade: 2, title: "がんばって", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["係","役割","責任","協力","継続"] },
+  // ※PDF抽出の「ぽんたと かんた」のthemeが崩れていたので補正（必要なら変更OK）
   { grade: 2, title: "ぽんたと かんた", domain: "A", theme: "善悪の判断・自律", aim: "（ねらいは後で入力）", keywords: ["迷い","判断","勇気","約束","自分で決める"] },
   { grade: 2, title: "一りん車", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","順番","安全","周り","配慮"] },
   { grade: 2, title: "がまんできなくて", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["がまん","気持ち","調整","考える","落ち着く"] },
+  // ※PDF抽出で「ーアンリ・ファーブ」になっていたもの。正式名称が分かったら差し替えOK
   { grade: 2, title: "ーアンリ・ファーブ", domain: "D", theme: "自然愛護", aim: "（ねらいは後で入力）", keywords: ["自然","生き物","観察","関心","尊重"] },
   { grade: 2, title: "三びきは 友だち", domain: "C", theme: "公正・公平", aim: "（ねらいは後で入力）", keywords: ["公平","態度","立場","えこひいき","気づき"] },
   { grade: 2, title: "ぎおんまつり", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["地域","行事","伝統","誇り","関わり"] },
+  // ※PDF抽出で「こめられた」になっていたもの。正式名称が分かったら差し替えOK
+  { grade: 2, title: "こめられた", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["地域","伝統","思い","願い","大切"] },
   { grade: 2, title: "あぶないよ", domain: "A", theme: "節度、節制（安全）", aim: "（ねらいは後で入力）", keywords: ["安全","判断","危険","断る","守る"] },
   { grade: 2, title: "ねえ、聞いて", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["聞く","共感","友達","気持ち","関係"] },
   { grade: 2, title: "きつねと ぶどう", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","気づき","支え","思い","ありがとう"] },
   { grade: 2, title: "わりこみ", domain: "A", theme: "善悪の判断", aim: "（ねらいは後で入力）", keywords: ["順番","判断","勇気","正しさ","行動"] },
   { grade: 2, title: "お月さまと コロ", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["素直","気持ち","正直","迷い","決心"] },
   { grade: 2, title: "やくそく", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","約束","支え","大切","気づき"] },
+  // ※PDF抽出で「23」になっていたもの。正式名称が分かったら差し替えOK
+  { grade: 2, title: "23", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","マナー","気持ち"] },
   { grade: 2, title: "くりの み", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","後悔","気づき","行動","思いやり"] },
+  // ※元データではBだったが、あなたの後半例では自然愛護(D)の扱いもあったので、必要なら修正OK
   { grade: 2, title: "ぐみの木と 小鳥", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["思いやり","気持ち","行動","関わり","大切"] },
   { grade: 2, title: "七つの 星", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","不思議","自然","思い","大切"] },
+
+  // --- 3年 ---
+  { grade: 3, title: "やさしさのバトン", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気づき","行動","関わり"] },
+  { grade: 3, title: "さと子の落とし物", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","気持ち","関係","行動"] },
+  { grade: 3, title: "心をしずめて", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","落ち着く","考える"] },
+  { grade: 3, title: "あこがれの人", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["自分","努力","勇気","迷い","成長"] },
+  { grade: 3, title: "ふろしき", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","文化","工夫","大切","誇り"] },
+  { grade: 3, title: "同じ小学校でも", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["違い","文化","理解","尊重","交流"] },
+  { grade: 3, title: "13 学級しょうかい", domain: "C", theme: "よりよい学校生活", aim: "（ねらいは後で入力）", keywords: ["学校","仲間","協力","役割","関わり"] },
+  { grade: 3, title: "あの日のこと", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","支え","気づき","思い"] },
+  { grade: 3, title: "同じなかまだから", domain: "C", theme: "みんななかま", aim: "（ねらいは後で入力）", keywords: ["仲間","公平","理解","尊重","関わり"] },
+  { grade: 3, title: "バスの中で", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["思いやり","公共","配慮","気づき","行動"] },
+  { grade: 3, title: "月 1 21 お母さんの", domain: "C", theme: "家族愛、家庭生活の充実", aim: "（ねらいは後で入力）", keywords: ["家族","思い","支え","感謝","つながり"] },
+  { grade: 3, title: "まどガラスと魚", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","素直","気持ち","判断","行動"] },
+  { grade: 3, title: "水族館ではたらく", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["仕事","役割","責任","協力","続ける"] },
+  { grade: 3, title: "助かった命", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","支え","気づき","大切","感謝"] },
+  { grade: 3, title: "これ、全部東京産", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["地域","よさ","誇り","産業","大切"] },
+  { grade: 3, title: "31 いつもありがとう", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","ありがとう","気づき","支え","思い"] },
+  { grade: 3, title: "ダブルブッキング", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["判断","約束","誠実","選択","責任"] },
+  { grade: 3, title: "光の星", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","不思議","自然","思い","大切"] },
+
+  // --- 4年 ---
+  { grade: 4, title: "ブルラッシュ", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["違い","文化","理解","尊重","交流"] },
+  { grade: 4, title: "さち子のえがお", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["自分","よさ","自信","気づき","行動"] },
+  { grade: 4, title: "いのちをふきこめ", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","気づき","支え","思い"] },
+  { grade: 4, title: "ちこく", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
+  { grade: 4, title: "8 決めつけないで", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["決めつけ","公平","理解","尊重","関わり"] },
+  { grade: 4, title: "ぼくの草取り体験", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["仕事","役割","責任","協力","継続"] },
+  { grade: 4, title: "家族の一員として", domain: "C", theme: "家族愛、家庭生活の充実", aim: "（ねらいは後で入力）", keywords: ["家族","役割","協力","思い","支え"] },
+  { grade: 4, title: "花さき山", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","思いやり","行動","気づき","大切"] },
+  { grade: 4, title: "遠足の朝", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["勇気","関わり","選択","気持ち","行動"] },
+  { grade: 4, title: "いじりといじめ", domain: "C", theme: "よりよい集団生活", aim: "（ねらいは後で入力）", keywords: ["いじめ","関係","気づき","言葉","思いやり"] },
+  { grade: 4, title: "お父さんのじまん", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","誇り","家族","仕事","大切"] },
+  { grade: 4, title: "とびらの前で", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気づき","行動","関係"] },
+  { grade: 4, title: "新次のしょうぎ", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","誠実","信頼","判断","行動"] },
+  { grade: 4, title: "雨ととの様", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","理由","守る"] },
+  { grade: 4, title: "朝がくると", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","支え","気づき","ありがとう","思い"] },
+  { grade: 4, title: "金色の魚", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","欲","気持ち","判断","行動"] },
+  { grade: 4, title: "三つのつつみ", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["思いやり","気づき","行動","関係","大切"] },
+  { grade: 4, title: "よわむし太郎", domain: "A", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["勇気","自分","挑戦","気づき","行動"] },
+  { grade: 4, title: "かわいそうなぞう", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","戦争","気づき","思い"] },
+  // ※PDF抽出で「ー海をわたった」になっていたもの。正式名称が分かったら差し替えOK
+  { grade: 4, title: "ー海をわたった", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","歴史","誇り","学ぶ","大切"] },
+
+  // --- 5年 ---
+  { grade: 5, title: "のび太に学ぼう", domain: "D", theme: "よりよく生きる喜び", aim: "（ねらいは後で入力）", keywords: ["よりよく生きる","喜び","気づき","成長","大切"] },
+  { grade: 5, title: "あいさつの心", domain: "B", theme: "礼儀", aim: "（ねらいは後で入力）", keywords: ["礼儀","あいさつ","言葉","相手","配慮"] },
+  { grade: 5, title: "「命」", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","支え","気づき","思い"] },
+  { grade: 5, title: "恩返しを", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","支え","気づき","ありがとう","思い"] },
+  { grade: 5, title: "サタデーグループ", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["協力","役割","責任","公共","継続"] },
+  { grade: 5, title: "古いバケツ", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","関係","気持ち","行動"] },
+  { grade: 5, title: "和太鼓調べ", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","文化","伝統","誇り","大切"] },
+  { grade: 5, title: "ことばのカタチ", domain: "A", theme: "個性の伸長", aim: "（ねらいは後で入力）", keywords: ["個性","言葉","よさ","気づき","自分"] },
+  { grade: 5, title: "母さんの歌", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","思い","気づき","大切","心"] },
+  { grade: 5, title: "のりづけされた詩", domain: "A", theme: "正直、誠実", aim: "（ねらいは後で入力）", keywords: ["正直","誠実","信頼","気持ち","行動"] },
+  { grade: 5, title: "真由、班長になる", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["責任","協力","役割","集団","行動"] },
+  { grade: 5, title: "名前のない手紙", domain: "C", theme: "正義の実現", aim: "（ねらいは後で入力）", keywords: ["正義","公平","思いやり","気づき","行動"] },
+  { grade: 5, title: "折れたタワー", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
+  { grade: 5, title: "父の仕事", domain: "C", theme: "勤労、公共の精神", aim: "（ねらいは後で入力）", keywords: ["仕事","役割","責任","公共","誇り"] },
+  { grade: 5, title: "流行おくれ", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","気持ち","判断","自分","行動"] },
+  { grade: 5, title: "家族のために", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["家族","思い","支え","協力","行動"] },
+  { grade: 5, title: "うばわれた自由", domain: "A", theme: "自由とは", aim: "（ねらいは後で入力）", keywords: ["自由","責任","選択","考える","行動"] },
+  { grade: 5, title: "森の絵", domain: "C", theme: "（題名要確認）", aim: "（ねらいは後で入力）", keywords: ["協力","やり遂げる","役割","集団","行動"] },
+  { grade: 5, title: "すれちがい", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
+  { grade: 5, title: "ながらって……", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","習慣","気づき","生活","行動"] },
+  { grade: 5, title: "これって不公平？", domain: "C", theme: "公平と不公平", aim: "（ねらいは後で入力）", keywords: ["公平","不公平","立場","気づき","考える"] },
+  { grade: 5, title: "かぜのでんわ", domain: "D", theme: "よりよく生きる喜び", aim: "（ねらいは後で入力）", keywords: ["よりよく生きる","喜び","気づき","思い","大切"] },
+
+  // --- 6年 ---
+  // ※PDF抽出で「2」になっていたもの。正式名称が分かったら差し替えOK
+  { grade: 6, title: "2", domain: "A", theme: "自由と責任", aim: "（ねらいは後で入力）", keywords: ["自由","責任","選択","判断","行動"] },
+  { grade: 6, title: "言葉のおくりもの", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","言葉","気持ち","関係"] },
+  { grade: 6, title: "命のアサガオ", domain: "D", theme: "生命の尊さ", aim: "（ねらいは後で入力）", keywords: ["命","大切","支え","気づき","思い"] },
+  { grade: 6, title: "先着100名様", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","判断","行動"] },
+  // ※PDF抽出で「ーワンガリ・マー」になっていたもの。正式名称が分かったら差し替えOK
+  { grade: 6, title: "ーワンガリ・マー", domain: "D", theme: "自然愛護", aim: "（ねらいは後で入力）", keywords: ["自然","環境","行動","尊重","つながり"] },
+  { grade: 6, title: "8 カスミと携帯電話", domain: "A", theme: "節度、節制", aim: "（ねらいは後で入力）", keywords: ["節度","情報","判断","使い方","責任"] },
+  { grade: 6, title: "ぼくたちの学校", domain: "C", theme: "よりよい学校生活", aim: "（ねらいは後で入力）", keywords: ["学校","協力","役割","愛着","行動"] },
+  { grade: 6, title: "男", domain: "A", theme: "真理の探究", aim: "（ねらいは後で入力）", keywords: ["真理","考える","探究","判断","行動"] },
+  { grade: 6, title: "おかげさまで", domain: "B", theme: "感謝", aim: "（ねらいは後で入力）", keywords: ["感謝","支え","気づき","ありがとう","思い"] },
+  { grade: 6, title: "初めてのアンカー", domain: "C", theme: "家族の幸せ", aim: "（ねらいは後で入力）", keywords: ["家族","幸せ","支え","気づき","思い"] },
+  { grade: 6, title: "貝塚博士", domain: "A", theme: "個性の伸長", aim: "（ねらいは後で入力）", keywords: ["個性","よさ","自分","気づき","自信"] },
+  { grade: 6, title: "ぼくだって", domain: "B", theme: "相互理解、寛容", aim: "（ねらいは後で入力）", keywords: ["理解","寛容","気持ち","関係","考える"] },
+  { grade: 6, title: "ロレンゾの友達", domain: "B", theme: "友情、信頼", aim: "（ねらいは後で入力）", keywords: ["友情","信頼","違い","理解","関係"] },
+  { grade: 6, title: "18 よみがえらせる", domain: "C", theme: "国や郷土を愛する", aim: "（ねらいは後で入力）", keywords: ["郷土","文化","誇り","学ぶ","大切"] },
+  // ※PDF抽出で「ー日本とトルコのつ」になっていたもの。正式名称が分かったら差し替えOK
+  { grade: 6, title: "ー日本とトルコのつ", domain: "C", theme: "国際理解、国際親善", aim: "（ねらいは後で入力）", keywords: ["国際理解","交流","違い","尊重","友情"] },
+  { grade: 6, title: "自由行動", domain: "A", theme: "自由の難しさ", aim: "（ねらいは後で入力）", keywords: ["自由","責任","判断","迷い","行動"] },
+  // ※PDF抽出で「ー大勢の人の命を」になっていたもの。正式名称が分かったら差し替えOK
+  { grade: 6, title: "ー大勢の人の命を", domain: "C", theme: "社会参画", aim: "（ねらいは後で入力）", keywords: ["社会","行動","できること","協力","責任"] },
+  { grade: 6, title: "青の洞門", domain: "D", theme: "感動、畏敬の念", aim: "（ねらいは後で入力）", keywords: ["感動","尊敬","行動","思い","大切"] },
+  { grade: 6, title: "最後のおくり物", domain: "B", theme: "親切、思いやり", aim: "（ねらいは後で入力）", keywords: ["親切","思いやり","気づき","行動","関係"] },
+  { grade: 6, title: "消えた本", domain: "C", theme: "規則の尊重", aim: "（ねらいは後で入力）", keywords: ["きまり","公共","配慮","判断","行動"] },
 ];
 
-
-// ====== 固定ルール ======
+// =======================
+// 固定ルール
+// =======================
 const MIN_CHARS = 110;
 const MAX_CHARS = 120;
 
@@ -856,12 +158,12 @@ const NG_PHRASES = [
 
 // 文字数（空白除外）
 function countChars(str) {
-  return str.replace(/\s/g, "").length;
+  return (str || "").replace(/\s/g, "").length;
 }
 
 // NG表現の回避
 function sanitize(text) {
-  let out = text;
+  let out = text || "";
   out = out.replaceAll("見られました", "思いを深めました");
   out = out.replaceAll("理解することができました", "考えを深めました");
   out = out.replaceAll("理解を深めることができました", "考えを深めました");
@@ -889,7 +191,7 @@ function adjustToRange(text, minChars, maxChars) {
     [/\s+/g, ""],
   ];
 
-  let out = text;
+  let out = text || "";
 
   // 長い場合は圧縮
   for (const [re, rep] of compressRules) {
@@ -917,15 +219,16 @@ function adjustToRange(text, minChars, maxChars) {
   if (countChars(out) > maxChars) {
     for (const f of fillers) {
       if (countChars(out) <= maxChars) break;
-      out = out.replace(f, "");
+      out = out.replaceAll(f, "");
     }
   }
+
   return out;
 }
 
 // 3文構成の骨格
 function buildDraft({ title, theme, aim, keywords }, variant) {
-  const kw = keywords?.[variant % (keywords?.length || 1)] || "";
+  const kw = keywords?.[variant % (keywords?.length || 1)] || "気づき";
 
   const s1 = `「${title}」の学習では、${theme}に関わる大切さについて考えました。`;
   const s2 = `登場人物の気持ちを自分に置き換え、${kw}に着目しながら、感じたことを出し合って話し合いました。`;
@@ -935,7 +238,7 @@ function buildDraft({ title, theme, aim, keywords }, variant) {
 }
 
 function normalizeTitle(t) {
-  return t.replace(/\s+/g, "").replace(/　/g, "");
+  return (t || "").replace(/\s+/g, "").replace(/　/g, "");
 }
 
 function getLesson(title) {
@@ -946,8 +249,8 @@ function getLesson(title) {
 // 表示用：候補
 function suggestLessons(q) {
   const n = normalizeTitle(q);
-  if (!n) return LESSONS.slice(0, 20);
-  return LESSONS.filter((l) => normalizeTitle(l.title).includes(n)).slice(0, 20);
+  if (!n) return LESSONS.slice(0, 50);
+  return LESSONS.filter((l) => normalizeTitle(l.title).includes(n)).slice(0, 50);
 }
 
 export default function App() {
@@ -981,15 +284,20 @@ export default function App() {
   };
 
   const copyText = async (text) => {
-    await navigator.clipboard.writeText(text);
-    alert("コピーしました");
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("コピーしました");
+    } catch (e) {
+      // iOS/Safari等の制限対策：選択して手動コピー
+      alert("自動コピーできませんでした。テキストを選択して手動でコピーしてください。");
+    }
   };
 
   return (
     <div className="wrap">
       <div className="topBar">
         <h1 className="title">道徳所見ジェネレーター（110〜120字）</h1>
-        <span className="pill">2年生（追加可）</span>
+        <span className="pill">{lesson ? `${lesson.grade}年生` : "学年未選択"}</span>
       </div>
 
       <div className="warn">
@@ -1006,14 +314,15 @@ export default function App() {
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="例：ぽんたとかんた / 金の斧 / 祇園祭 など"
+                placeholder="例：ぽんたと かんた / 金の おの / ぎおんまつり など"
                 list="lesson-list"
               />
               <datalist id="lesson-list">
                 {suggestions.map((l) => (
-                  <option key={l.title} value={l.title} />
+                  <option key={`${l.grade}-${l.title}`} value={l.title} />
                 ))}
               </datalist>
+
               <div className="muted">
                 {lesson ? (
                   <>
